@@ -1,4 +1,4 @@
-version: '3.7'
+version: '3.9'
 services:
   postgres-inscription:
     container_name: postgres-inscription
@@ -10,12 +10,8 @@ services:
       PGDATA: /data/postgres
     volumes:
       - ./postgres-inscription:/data/postgres
-    expose:
-      - "5431"
     ports:
       - "5431:5431"
-    command: -p 5431
-    restart: always
 
   postgres-examen:
     container_name: postgres-examen
@@ -28,8 +24,7 @@ services:
     volumes:
       - ./postgres-examen:/data/postgres
     ports:
-      - "5432:5432"
-    restart: always
+      - "5433:5433"
 
   postgres-admission:
     container_name: postgres-admission
@@ -42,8 +37,7 @@ services:
     volumes:
       - ./postgres-admission:/data/postgres
     ports:
-      - "5432:5432"
-    restart: always
+      - "5434:5434"
 
   service-inscription:
     container_name: service-inscription
@@ -54,7 +48,7 @@ services:
     environment:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
-      - DATABASE_URL=jdbc:postgresql://postgres-inscription:5432/gestion_inscription
+      - DATABASE_URL=jdbc:postgresql://postgres-inscription:5431/gestion_inscription
     depends_on:
       - postgres-inscription
 
@@ -67,7 +61,7 @@ services:
     environment:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
-      - DATABASE_URL=jdbc:postgresql://postgres-examen:5432/gestion_examen
+      - DATABASE_URL=jdbc:postgresql://postgres-examen:5433/gestion_examen
     depends_on:
       - postgres-examen
 
@@ -80,7 +74,7 @@ services:
     environment:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
-      - DATABASE_URL=jdbc:postgresql://postgres-admission:5432/gestion_admission
+      - DATABASE_URL=jdbc:postgresql://postgres-admission:5434/gestion_admission
     depends_on:
       - postgres-admission
 
