@@ -1,9 +1,9 @@
 package com.example.serviceinscription.model;
 
+import jakarta.persistence.*;
 import lombok.Data;
 
-import javax.persistence.Entity;
-import javax.persistence.Id;
+
 
 @Data
 @Entity

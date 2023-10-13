@@ -41,10 +41,12 @@ services:
 
   service-inscription:
     container_name: service-inscription
-    image: service-inscription
+    image: inscription:latest
     build:
       context: ./service-inscription
       dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
     environment:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
@@ -54,10 +56,12 @@ services:
 
   service-examen:
     container_name: service-examen
-    image: service-examen
+    image: examen:latest
     build:
       context: ./service-examen
       dockerfile: Dockerfile
+    ports:
+      - "8082:8082"
     environment:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
@@ -67,10 +71,12 @@ services:
 
   service-admission:
     container_name: service-admission
-    image: service-admission
+    image: admission:latest
     build:
       context: ./service-admission
       dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
     environment:
       - DATABASE_USERNAME=postgres
       - DATABASE_PASSWORD=postgres
@@ -78,3 +84,7 @@ services:
     depends_on:
       - postgres-admission
 
+volumes:
+  postgres-admission: {}
+  postgres-examen: {}
+  postgres-inscription: {}
