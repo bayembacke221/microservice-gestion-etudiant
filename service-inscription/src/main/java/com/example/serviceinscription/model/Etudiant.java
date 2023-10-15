@@ -1,6 +1,7 @@
 package com.example.serviceinscription.model;
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
+import javax.persistence.*;
 import lombok.Data;
 
 

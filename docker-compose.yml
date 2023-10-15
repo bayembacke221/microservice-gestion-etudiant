@@ -1,90 +1,72 @@
 version: '3.9'
 services:
-  postgres-inscription:
-    container_name: postgres-inscription
-    image: postgres
+  mysql_inscription:
+    container_name: mysql_inscription
+    image: mysql:latest
     environment:
-      POSTGRES_DB: gestion_inscription
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gestion_inscription
     volumes:
-      - ./postgres-inscription:/data/postgres
+      - /d/volumes/mysql_inscription:/var/lib/mysql
     ports:
-      - "5431:5431"
+      - "3305:3306"
 
-  postgres-examen:
-    container_name: postgres-examen
-    image: postgres
+  mysql_examen:
+    container_name: mysql_examen
+    image: mysql:latest
     environment:
-      POSTGRES_DB: gestion_examen
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gestion_examen
     volumes:
-      - ./postgres-examen:/data/postgres
+      - /d/volumes/mysql_examen:/var/lib/mysql
     ports:
-      - "5433:5433"
+      - "3307:3306"
 
-  postgres-admission:
-    container_name: postgres-admission
-    image: postgres
+  mysql_admission:
+    container_name: mysql_admission
+    image: mysql:latest
     environment:
-      POSTGRES_DB: gestion_admission
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: postgres
-      PGDATA: /data/postgres
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: gestion_admission
     volumes:
-      - ./postgres-admission:/data/postgres
+      - /d/volumes/mysql_admission:/var/lib/mysql
     ports:
-      - "5434:5434"
+      - "3308:3306"
 
-  service-inscription:
-    container_name: service-inscription
-    image: inscription:latest
+  service_inscription:
+    container_name: service_inscription
+    image: inscription
     build:
       context: ./service-inscription
       dockerfile: Dockerfile
     ports:
-      - "8081:8081"
-    environment:
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_URL=jdbc:postgresql://postgres-inscription:5431/gestion_inscription
+      - "8081:8080"
     depends_on:
-      - postgres-inscription
+      - mysql_inscription
 
-  service-examen:
-    container_name: service-examen
-    image: examen:latest
+  service_examen:
+    container_name: service_examen
+    image: examen
     build:
       context: ./service-examen
       dockerfile: Dockerfile
     ports:
-      - "8082:8082"
-    environment:
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_URL=jdbc:postgresql://postgres-examen:5433/gestion_examen
+      - "8082:8080"
     depends_on:
-      - postgres-examen
+      - mysql_examen
 
-  service-admission:
-    container_name: service-admission
-    image: admission:latest
+  service_admission:
+    container_name: service_admission
+    image: admission
     build:
       context: ./service-admission
       dockerfile: Dockerfile
     ports:
-      - "8083:8083"
-    environment:
-      - DATABASE_USERNAME=postgres
-      - DATABASE_PASSWORD=postgres
-      - DATABASE_URL=jdbc:postgresql://postgres-admission:5434/gestion_admission
+      - "8083:8080"
     depends_on:
-      - postgres-admission
+      - mysql_admission
 
 volumes:
-  postgres-admission: {}
-  postgres-examen: {}
-  postgres-inscription: {}
+  mysql_admission: {}
+  mysql_examen: {}
+  mysql_inscription: {}

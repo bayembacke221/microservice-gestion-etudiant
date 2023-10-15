@@ -2,8 +2,9 @@ package com.example.serviceexamen.model;
 
 import lombok.Data;
 
-import jakarta.persistence.*;
+//import jakarta.persistence.*;
 
+import javax.persistence.*;
 @Data
 @Entity
 public class Moyenne {
