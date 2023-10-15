@@ -14,6 +14,7 @@ import javax.persistence.*;
 @Setter
 @AllArgsConstructor()
 @NoArgsConstructor
+@Table(name = "admis")
 public class Admis {
     @Id
     private String numCarte;
