@@ -1,37 +1,67 @@
-version: '3.9'
+version: "3.9"
 services:
   mysql_inscriptions:
     container_name: mysql_inscriptions
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: gestion_inscription
+      - "MYSQL_DATABASE=gestion_inscription"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_ROOT_PASSWORD=rootpassword"
+      - "MYSQL_USER=springuser"
     volumes:
-      - /d/my_volumes/mysql_inscriptions:/var/lib/mysql
+      #- /d/my_volumes/mysql_inscriptions:/var/lib/mysql
+      - mysql_inscriptions:/var/lib/mysql
     ports:
       - "3305:3306"
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   mysql_examens:
     container_name: mysql_examens
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: gestion_examen
+      - "MYSQL_DATABASE=gestion_examen"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_ROOT_PASSWORD=rootpassword"
+      - "MYSQL_USER=springuser"
     volumes:
-      - /d/my_volumes/mysql_examens:/var/lib/mysql
+      #- /d/my_volumes/mysql_examens:/var/lib/mysql
+      - mysql_examens:/var/lib/mysql
     ports:
       - "3307:3306"
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   mysql_admissions:
     container_name: mysql_admissions
     image: mysql:latest
     environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: gestion_admission
+      - "MYSQL_DATABASE=gestion_admission"
+      - "MYSQL_PASSWORD=secret"
+      - "MYSQL_ROOT_PASSWORD=rootpassword"
+      - "MYSQL_USER=springuser"
     volumes:
-      - /d/my_volumes/mysql_admissions:/var/lib/mysql
+      #- /d/my_volumes/mysql_admissions:/var/lib/mysql
+      - mysql_admissions:/var/lib/mysql
     ports:
       - "3308:3306"
+    networks:
+      - my-network
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
 
   service_inscription:
     container_name: service_inscription
@@ -40,11 +70,15 @@ services:
       context: ./service-inscription
       dockerfile: Dockerfile
     ports:
-      - "8081:8080"
+      - "8081:8081"
     depends_on:
       - mysql_inscriptions
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_inscriptions:3306/gestion_inscription?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
     networks:
-        - my-network
+      - my-network
 
   service_examen:
     container_name: service_examen
@@ -53,11 +87,15 @@ services:
       context: ./service-examen
       dockerfile: Dockerfile
     ports:
-      - "8082:8080"
+      - "8082:8082"
     depends_on:
       - mysql_examens
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_examens:3306/gestion_examen?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
     networks:
-        - my-network
+      - my-network
 
   service_admission:
     container_name: service_admission
@@ -66,9 +104,13 @@ services:
       context: ./service-admission
       dockerfile: Dockerfile
     ports:
-      - "8083:8080"
+      - "8083:8083"
     depends_on:
       - mysql_admissions
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql_admissions:3306/gestion_admission?autoReconnect=true&allowPublicKeyRetrieval=true&useSSL=false
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: rootpassword
     networks:
       - my-network
 
@@ -77,8 +119,6 @@ networks:
     driver: bridge
 
 volumes:
-  mysql_admissions: {}
-  mysql_examens: {}
-  mysql_inscriptions: {}
-
-
+  mysql_admissions:
+  mysql_examens:
+  mysql_inscriptions:
