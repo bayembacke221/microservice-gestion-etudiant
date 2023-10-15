@@ -8,6 +8,7 @@ import lombok.Data;
 
 @Data
 @Entity
+@Table(name = "etudiants")
 public class Etudiant {
     @Id
     private String numCarte;
